@@ -1,9 +1,9 @@
 # 🎓 Student Management System – Layered Architecture
 
 ## 📋 Project Information
-- **Student Name:** [Your Full Name]
-- **Student ID:** [Your Student ID]
-- **Section:** [Your Section]
+- **Student Name:** [นาย เอกพันธ์ ทศทิศรังสรรค์]
+- **Student ID:** [67543210050-0]
+- **Section:** [2]
 - **Course:** ENGSE207 Software Architecture
 
 ---
