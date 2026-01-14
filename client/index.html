@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --background: #f1f5f9;
+            --surface: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sarabun', sans-serif; }
+        
+        body { background-color: var(--background); color: #1e293b; }
+
+        /* Header */
+        header { background: var(--primary); color: white; padding: 1rem 2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        header h1 { font-size: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+
+        /* Layout */
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; display: grid; grid-template-columns: 1fr 2.5fr; gap: 2rem; }
+        
+        /* Cards */
+        .card { background: var(--surface); border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .card h2 { margin-bottom: 1.5rem; font-size: 1.25rem; color: var(--primary); border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+
+        /* Form */
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
+        .form-control { width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; transition: all 0.2s; }
+        .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        
+        .btn { width: 100%; padding: 0.75rem; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: #1d4ed8; }
+
+        /* Table */
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background: #f8fafc; font-weight: 600; color: var(--secondary); }
+        tr:hover { background: #f8fafc; }
+
+        /* Badges */
+        .badge { padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; }
+        .bg-active { background: #dcfce7; color: #166534; }
+        .bg-graduated { background: #dbeafe; color: #1e40af; }
+        .bg-suspended { background: #fee2e2; color: #991b1b; }
+        .bg-withdrawn { background: #f3f4f6; color: #374151; }
+
+        /* Action Buttons */
+        .action-btn { padding: 0.4rem; border-radius: 4px; border: 1px solid #e2e8f0; background: white; cursor: pointer; color: var(--secondary); transition: 0.2s; margin-right: 4px; }
+        .action-btn:hover { background: #f1f5f9; color: var(--primary); }
+        .btn-delete:hover { background: #fee2e2; color: var(--danger); border-color: #fee2e2; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fas fa-user-graduate"></i> Student Management System</h1>
+    </header>
+
+    <div class="container">
+        <aside>
+            <div class="card">
+                <h2><i class="fas fa-plus-circle"></i> ลงทะเบียนนักศึกษา</h2>
+                <form id="addStudentForm">
+                    <div class="form-group">
+                        <label>รหัสนักศึกษา (10 หลัก)</label>
+                        <input type="text" id="student_code" class="form-control" placeholder="เช่น 6531501001" required maxlength="10">
+                    </div>
+                    <div class="form-group">
+                        <label>ชื่อจริง</label>
+                        <input type="text" id="first_name" class="form-control" placeholder="First Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>นามสกุล</label>
+                        <input type="text" id="last_name" class="form-control" placeholder="Last Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>อีเมล</label>
+                        <input type="email" id="email" class="form-control" placeholder="example@rmutl.ac.th" required>
+                    </div>
+                    <div class="form-group">
+                        <label>สาขาวิชา</label>
+                        <select id="major" class="form-control" required>
+                            <option value="">เลือกสาขา...</option>
+                            <option value="SE">Software Engineering (SE)</option>
+                            <option value="CS">Computer Science (CS)</option>
+                            <option value="IT">Information Tech (IT)</option>
+                            <option value="CE">Computer Engineering (CE)</option>
+                            <option value="DS">Data Science (DS)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> บันทึกข้อมูล
+                    </button>
+                </form>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <h2><i class="fas fa-chart-pie"></i> สรุปข้อมูล</h2>
+                <div id="statsContent">
+                    <p>กำลังโหลด...</p>
+                </div>
+            </div>
+        </aside>
+
+        <main>
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2><i class="fas fa-list"></i> รายชื่อนักศึกษา</h2>
+                    <button onclick="fetchStudents()" class="action-btn" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+                </div>
+                
+                <div class="table-responsive">
+                    <table id="studentTable">
+                        <thead>
+                            <tr>
+                                <th>รหัส</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>สาขา</th>
+                                <th>GPA</th>
+                                <th>สถานะ</th>
+                                <th>จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api/students';
+
+        // 1. โหลดข้อมูลเมื่อเปิดหน้าเว็บ
+        document.addEventListener('DOMContentLoaded', fetchStudents);
+
+        // 2. ฟังก์ชันดึงข้อมูลนักศึกษา
+        async function fetchStudents() {
+            try {
+                const res = await fetch(API_URL);
+                const data = await res.json();
+                
+                renderTable(data.students);
+                renderStats(data.statistics);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('ไม่สามารถเชื่อมต่อกับ Server ได้ กรุณาตรวจสอบว่า Node.js รันอยู่หรือไม่');
+            }
+        }
+
+        // 3. แสดงข้อมูลในตาราง
+        function renderTable(students) {
+            const tbody = document.querySelector('#studentTable tbody');
+            tbody.innerHTML = '';
+
+            if (students.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">ไม่พบข้อมูลนักศึกษา</td></tr>';
+                return;
+            }
+
+            students.forEach(student => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><span style="font-family: monospace; font-weight: bold;">${student.student_code}</span></td>
+                    <td>
+                        <div>${student.first_name} ${student.last_name}</div>
+                        <div style="font-size: 0.8rem; color: #64748b;">${student.email}</div>
+                    </td>
+                    <td><span class="badge" style="background: #e2e8f0;">${student.major}</span></td>
+                    <td>
+                        <div style="font-weight: bold;">${student.gpa.toFixed(2)}</div>
+                        <button class="action-btn" onclick="updateGPA(${student.id}, ${student.gpa})" style="font-size: 0.7rem;">แก้ไข</button>
+                    </td>
+                    <td>
+                        <span class="badge bg-${student.status}">${student.status}</span>
+                        <button class="action-btn" onclick="updateStatus(${student.id}, '${student.status}')" style="font-size: 0.7rem;"><i class="fas fa-pen"></i></button>
+                    </td>
+                    <td>
+                        <button class="action-btn btn-delete" onclick="deleteStudent(${student.id})" title="ลบข้อมูล">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 4. แสดงสถิติ
+        function renderStats(stats) {
+            const container = document.getElementById('statsContent');
+            container.innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div style="background: #eff6ff; padding: 10px; border-radius: 8px;">
+                        <div style="font-size: 0.8rem; color: var(--primary);">ทั้งหมด</div>
+                        <div style="font-size: 1.5rem; font-weight: bold;">${stats.total}</div>
+                    </div>
+                    <div style="background: #dcfce7; padding: 10px; border-radius: 8px;">
+                        <div style="font-size: 0.8rem; color: #166534;">GPA เฉลี่ย</div>
+                        <div style="font-size: 1.5rem; font-weight: bold;">${stats.averageGPA}</div>
+                    </div>
+                    <div style="background: #f0fdf4; padding: 10px; border-radius: 8px;">
+                        <div style="font-size: 0.8rem;">Active</div>
+                        <div style="font-weight: bold;">${stats.active}</div>
+                    </div>
+                    <div style="background: #fef2f2; padding: 10px; border-radius: 8px;">
+                        <div style="font-size: 0.8rem;">Suspended</div>
+                        <div style="font-weight: bold;">${stats.suspended}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 5. เพิ่มนักศึกษา (POST)
+        document.getElementById('addStudentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const studentData = {
+                student_code: document.getElementById('student_code').value,
+                first_name: document.getElementById('first_name').value,
+                last_name: document.getElementById('last_name').value,
+                email: document.getElementById('email').value,
+                major: document.getElementById('major').value
+            };
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(studentData)
+                });
+
+                if (res.ok) {
+                    alert('✅ เพิ่มนักศึกษาสำเร็จ!');
+                    document.getElementById('addStudentForm').reset();
+                    fetchStudents();
+                } else {
+                    const error = await res.json();
+                    alert('❌ Error: ' + error.error);
+                }
+            } catch (err) {
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+            }
+        });
+
+        // 6. ลบนักศึกษา (DELETE)
+        async function deleteStudent(id) {
+            if (!confirm('ยืนยันที่จะลบข้อมูลนักศึกษานี้?')) return;
+
+            try {
+                const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+                const result = await res.json();
+
+                if (res.ok) {
+                    alert('🗑️ ลบข้อมูลสำเร็จ');
+                    fetchStudents();
+                } else {
+                    alert('❌ ลบไม่ได้: ' + result.error);
+                }
+            } catch (err) {
+                alert('เกิดข้อผิดพลาด');
+            }
+        }
+
+        // 7. อัปเดต GPA (PATCH)
+        async function updateGPA(id, currentGPA) {
+            const newGPA = prompt("กรอกเกรดเฉลี่ยใหม่ (0.00 - 4.00):", currentGPA);
+            if (newGPA === null) return;
+
+            const gpaValue = parseFloat(newGPA);
+            if (isNaN(gpaValue) || gpaValue < 0 || gpaValue > 4) {
+                alert("กรุณากรอกตัวเลขระหว่าง 0.00 - 4.00");
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/${id}/gpa`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ gpa: gpaValue })
+                });
+
+                if (res.ok) {
+                    fetchStudents();
+                } else {
+                    const error = await res.json();
+                    alert('❌ Error: ' + error.error);
+                }
+            } catch (err) {
+                alert('Connection Error');
+            }
+        }
+
+        // 8. อัปเดตสถานะ (PATCH)
+        async function updateStatus(id, currentStatus) {
+            const statuses = ['active', 'graduated', 'suspended', 'withdrawn'];
+            let message = "เลือกสถานะใหม่โดยพิมพ์ชื่อสถานะ:\n";
+            statuses.forEach(s => message += `- ${s}\n`);
+            
+            const newStatus = prompt(message, currentStatus);
+            if (!newStatus) return;
+
+            if (!statuses.includes(newStatus.toLowerCase())) {
+                alert("สถานะไม่ถูกต้อง");
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/${id}/status`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus.toLowerCase() })
+                });
+
+                if (res.ok) {
+                    fetchStudents();
+                } else {
+                    const error = await res.json();
+                    alert('❌ Error: ' + error.error);
+                }
+            } catch (err) {
+                alert('Connection Error');
+            }
+        }
+    </script>
+</body>
+</html>
