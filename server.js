@@ -20,6 +20,6 @@ app.use(errorHandler);
 
 // Start Server
 app.listen(PORT, () => {
-    console.log(`✅ Student Management System running on http://localhost:${PORT}`);
+    console.log(`✅ Student Management System running on http://192.168.56.111:${PORT}`);
     console.log(`📂 Architecture: Layered (3-Tier)`);
 });
