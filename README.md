@@ -1,3 +1,22 @@
+# Update
+# 🎁 Bonus Content
+
+---
+
+### 🖼️ Project Overview (01)
+<img src="https://github.com/user-attachments/assets/d914698f-6495-4848-8bff-ce30b202be13" width="100%" alt="Image 1">
+
+---
+
+### 🖼️ Project Overview (02)
+<img src="https://github.com/user-attachments/assets/21618fd2-59e1-4214-973b-c81865361aea" width="100%" alt="Image 2">
+
+---
+
+### 🎥 Video Demonstration (VDO)
+คุณสามารถรับชมวิดีโอสาธิตการใช้งานได้ที่ลิงก์ด้านล่างนี้:
+
+👉 [**คลิกเพื่อดูวิดีโอผ่าน Google Drive**](https://drive.google.com/file/d/1nfVQojQzCxsoTpmd9MNEN1GaoW5g8e73/view?usp=sharing)
 # 🎓 Student Management System – Layered Architecture
 
 ## 📋 Project Information
@@ -82,5 +101,8 @@ GET	/api/students/:id	Get student by ID
 POST	/api/students	Create new student
 PUT	/api/students/:id	Update student (all fields)
 PATCH	/api/students/:id/gpa	Update GPA only
+
+
+
 PATCH	/api/students/:id/status	Update student status
 DELETE	/api/students/:id	Delete student (status must NOT be active)
